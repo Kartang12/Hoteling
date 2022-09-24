@@ -24,6 +24,7 @@ namespace HotelApi.Services
         public async Task<Hotel> CreateAsync(CreateHotelRequest request)
         {
             var newHotel = _mapper.Map<Hotel>(request);
+            newHotel.Id = Guid.NewGuid();
             var result = await _context.Hotels.AddAsync(newHotel);
             return result.Entity;
         }

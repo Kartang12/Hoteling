@@ -31,6 +31,8 @@ namespace ReviewApi.Services
         public async Task<Review> CreateAsync(CreateReviewRequest request)
         {
             var newReview = _mapper.Map<Review>(request);
+            newReview.Id = Guid.NewGuid();
+            newReview.Date = DateTime.Now;
             var result = await _context.Reviews.AddAsync(newReview);
             return result.Entity;
         }

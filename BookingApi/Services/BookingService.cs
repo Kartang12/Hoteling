@@ -12,7 +12,7 @@ namespace BookingApi.Services
         private readonly BookingContext _context;
         private readonly IMapper _mapper;
 
-        public async Task<IEnumerable<Booking>> GetByIds(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<Booking>> GetByIdsAsync(IEnumerable<Guid> ids)
         {
             return await _context.Bookings.Where(x => ids.Contains(x.Id)).ToListAsync();
         }
@@ -22,20 +22,21 @@ namespace BookingApi.Services
             return await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<BookingResponse> Book(BookingRequest request)
+        public async Task<BookingResponse> CreateAsync(BookingRequest request)
         {
             var newBooking = _mapper.Map<Booking>(request);
+            newBooking.Id = Guid.NewGuid();
             var completeBooking = await _context.Bookings.AddAsync(newBooking);
             return _mapper.Map<BookingResponse>(completeBooking);
         }
 
-        public async Task UnBook(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var toDelete = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
             _context.Bookings.Remove(toDelete);
         }
 
-        public async Task<Booking> Update(Booking toUpdate)
+        public async Task<Booking> UpdateAsync(Booking toUpdate)
         {
             _context.Bookings.Update(toUpdate);
             return toUpdate;
