@@ -1,15 +1,15 @@
-﻿using HotelApi.Contracts.Requests;
-using HotelApi.Domain;
-using HotelApi.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserApi.Contracts.Requests;
+using UserApi.Domain;
+using UserApi.Services;
 
-namespace HotelApi.Controllers
+namespace UserApi.Controllers
 {
-    public class HotelController : Controller
+    public class UserController : Controller
     {
-        private readonly HotelService _service;
+        readonly UserService _service;
 
-        public HotelController(HotelService service)
+        public UserController(UserService service)
         {
             _service = service;
         }
@@ -36,7 +36,7 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        public async Task<IActionResult> Create(CreateHotelRequest request)
+        public async Task<IActionResult> Create(CreateUserDataRequest request)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        public async Task<IActionResult> Update(Hotel Request)
+        public async Task<IActionResult> Update(UserData Request)
         {
             try
             {
