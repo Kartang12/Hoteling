@@ -6,10 +6,10 @@ namespace AuthorizationApi.Controllers
 {
     public class AuthController : Controller
     {
-        [HttpPost]
-        public IActionResult Register(UserRegisterRequest request)
-        {
+        //[HttpPost]
+        //public IActionResult Register(UserRegisterRequest request)
+        //{
 
-        }
+        //}
     }
 }

@@ -1,0 +1,67 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/booking/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/booking/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    //{
+    //  "DownstreamPathTemplate": "/hotel/{everything}",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5002
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "{everything}",
+    //  "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/hotel/{everything}",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5003
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "{everything}",
+    //  "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/reviews/{everything}",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5003
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "{everything}",
+    //  "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/users/{everything}",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5004
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "{everything}",
+    //  "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    //}
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7192"
+  }
+}
