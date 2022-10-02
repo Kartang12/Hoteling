@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using ReviewApi.DbContext;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ReviewsContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

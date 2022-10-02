@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<BookingContext>(options => options.UseSqlServer(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<BookingContext>(options => options.UseSqlServer(connectionString));
 
 
 builder.Services.AddControllers();
@@ -24,5 +24,7 @@ if (!app.Environment.IsDevelopment())
 //app.UseAuthentication();
 app.UseRouting();
 //app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

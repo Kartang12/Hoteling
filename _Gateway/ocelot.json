@@ -11,7 +11,7 @@
       ],
       "UpstreamPathTemplate": "/booking/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
-    },
+    }
     //{
     //  "DownstreamPathTemplate": "/hotel/{everything}",
     //  "DownstreamScheme": "https",
@@ -60,6 +60,18 @@
     //  "UpstreamPathTemplate": "{everything}",
     //  "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     //}
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "contacts",
+      "Config": [
+        {
+          "Name": "Contacts API",
+          "Version": "v1",
+          "Url": "http://localhost:5001/swagger/v1/swagger.json"
+        }
+      ]
+    },
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7192"
