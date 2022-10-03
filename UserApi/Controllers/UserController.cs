@@ -5,6 +5,8 @@ using UserApi.Services;
 
 namespace UserApi.Controllers
 {
+    [Route("[controller]/[action]")]
+    [ApiController]
     public class UserController : Controller
     {
         readonly UserService _service;

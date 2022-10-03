@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using BookingApi.DbContext;
 using Microsoft.EntityFrameworkCore;
 using UserApi.Contracts.Requests;
+using UserApi.DbContext;
 using UserApi.Domain;
 
 namespace UserApi.Services

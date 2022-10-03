@@ -5,6 +5,8 @@ using ReviewApi.Services;
 
 namespace ReviewApi.Controllers
 {
+    [Route("[controller]/[action]")]
+    [ApiController]
     public class ReviewsController : Controller
     {
         private readonly ReviewService _service;

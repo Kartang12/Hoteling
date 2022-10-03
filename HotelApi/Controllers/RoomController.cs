@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApi.Controllers
 {
+    [Route("[controller]/[action]")]
+    [ApiController]
     public class RoomController : Controller
     {
         private readonly RoomService _service;

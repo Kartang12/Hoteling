@@ -1,27 +1,32 @@
-
 using HotelApi.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<HotelingContext>(options => options.UseSqlServer(connectionString));
 
-var app = builder.Build();
+builder.Services.AddMvc();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hoteling API", Version = "v1" });
+});
+builder.Services.AddControllers();
 
-// Configure the HTTP request pipeline.
+var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
 }
-builder.Services.AddControllers();
 
-app.UseAuthentication();
 app.UseRouting();
-app.UseAuthorization();
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = string.Empty;
+});
+app.MapControllers();
 
 app.Run();

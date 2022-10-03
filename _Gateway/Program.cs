@@ -1,7 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using Ocelot.Values;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +34,6 @@ app.UseSwaggerForOcelotUI(opt =>
     opt.PathToSwaggerGenerator = "/swagger/docs";
 });
 
-app.UseAuthorization();
+//app.UseAuthorization();
 app.UseOcelot().Wait();
 app.Run();
