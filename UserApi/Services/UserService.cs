@@ -6,7 +6,16 @@ using UserApi.Domain;
 
 namespace UserApi.Services
 {
-    public class UserService
+    public interface IUserService
+    {
+        Task<UserData> CreateAsync(CreateUserDataRequest request);
+        Task DeleteAsync(Guid id);
+        Task<UserData> GetByIdAsync(Guid id);
+        Task<IEnumerable<UserData>> GetByIdsAsync(IEnumerable<Guid> ids);
+        Task<UserData> UpdateAsync(UserData toUpdate);
+    }
+
+    public class UserService : IUserService
     {
         readonly UsersContext _context;
         readonly IMapper _mapper;

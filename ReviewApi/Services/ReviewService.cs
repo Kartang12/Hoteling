@@ -6,7 +6,16 @@ using ReviewApi.Domain;
 
 namespace ReviewApi.Services
 {
-    public class ReviewService
+    public interface IReviewService
+    {
+        Task<Review> CreateAsync(CreateReviewRequest request);
+        Task DeleteAsync(Guid id);
+        Task<Review> GetByIdAsync(Guid id);
+        Task<IEnumerable<Review>> GetByIdsAsync(IEnumerable<Guid> ids);
+        Task<Review> UpdateAsync(Review toUpdate);
+    }
+
+    public class ReviewService : IReviewService
     {
         readonly ReviewsContext _context;
         private readonly IMapper _mapper;

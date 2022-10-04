@@ -6,7 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelApi.Services
 {
-    public class RoomService
+    public interface IRoomService
+    {
+        Task<Room> CreateAsync(CreateRoomRequest request);
+        Task DeleteAsync(Guid id);
+        Task<Room> GetByIdAsync(Guid id);
+        Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids);
+        Task<Room> UpdateAsync(Room toUpdate);
+    }
+
+    public class RoomService : IRoomService
     {
         private readonly HotelingContext _context;
         private readonly IMapper _mapper;

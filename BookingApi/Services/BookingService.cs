@@ -7,10 +7,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingApi.Services
 {
-    public class BookingService
+    public interface IBookingService
+    {
+        Task<IEnumerable<Booking>> GetByIdsAsync(IEnumerable<Guid> ids);
+
+        Task<Booking> GetById(Guid id);
+
+        Task<BookingResponse> CreateAsync(BookingRequest request);
+
+        Task DeleteAsync(Guid id);
+
+        Task<Booking> UpdateAsync(Booking toUpdate);
+    }
+
+    public class BookingService : IBookingService
     {
         private readonly BookingContext _context;
         private readonly IMapper _mapper;
+
+        public BookingService(IMapper mapper, BookingContext context = null)
+        {
+            _mapper = mapper;
+            _context = context;
+        }
 
         public async Task<IEnumerable<Booking>> GetByIdsAsync(IEnumerable<Guid> ids)
         {

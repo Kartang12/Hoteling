@@ -1,6 +1,7 @@
 using UserApi.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using UserApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddControllers();
+
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
