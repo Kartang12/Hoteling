@@ -11,6 +11,12 @@ namespace ReviewApi.Controllers
     {
         private readonly ReviewService _service;
 
+        public ReviewsController(ReviewService service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetByIds(IEnumerable<Guid> ids)
         {
             try
@@ -22,6 +28,8 @@ namespace ReviewApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -33,6 +41,7 @@ namespace ReviewApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost]
         public async Task<IActionResult> Create(CreateReviewRequest request)
         {
             try
@@ -44,6 +53,7 @@ namespace ReviewApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -56,6 +66,7 @@ namespace ReviewApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
         public async Task<IActionResult> Update(Review Request)
         {
             try

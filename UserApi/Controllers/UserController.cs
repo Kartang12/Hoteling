@@ -16,6 +16,7 @@ namespace UserApi.Controllers
             _service = service;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetByIds(IEnumerable<Guid> ids)
         {
             try
@@ -27,6 +28,7 @@ namespace UserApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -38,6 +40,7 @@ namespace UserApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost]
         public async Task<IActionResult> Create(CreateUserDataRequest request)
         {
             try
@@ -49,6 +52,7 @@ namespace UserApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -61,6 +65,7 @@ namespace UserApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
         public async Task<IActionResult> Update(UserData Request)
         {
             try

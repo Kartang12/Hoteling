@@ -11,6 +11,12 @@ namespace HotelApi.Controllers
     {
         private readonly RoomService _service;
 
+        public RoomController(RoomService service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetByIds(IEnumerable<Guid> ids)
         {
             try
@@ -22,6 +28,8 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -33,6 +41,8 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
         public async Task<IActionResult> Create(CreateRoomRequest request)
         {
             try
@@ -44,6 +54,7 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -56,6 +67,7 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
         public async Task<IActionResult> Update(Room Request)
         {
             try
