@@ -2,6 +2,8 @@ using UserApi.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using UserApi.Services;
+using AutoMapper;
+using UserApi.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +20,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
-
 builder.Services.AddScoped<IUserService, UserService>();
+
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
 
 var app = builder.Build();
 

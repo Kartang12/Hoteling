@@ -10,13 +10,9 @@ namespace BookingApi.Services
     public interface IBookingService
     {
         Task<IEnumerable<Booking>> GetByIdsAsync(IEnumerable<Guid> ids);
-
         Task<Booking> GetById(Guid id);
-
         Task<BookingResponse> CreateAsync(BookingRequest request);
-
         Task DeleteAsync(Guid id);
-
         Task<Booking> UpdateAsync(Booking toUpdate);
     }
 
