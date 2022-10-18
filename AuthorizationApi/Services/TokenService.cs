@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AuthorizationApi.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -21,7 +22,7 @@ namespace AuthorizationApi.Services
         public TokenService(IConfiguration config)
         {
             _config = config;
-            string secret = _config.GetValue<string>("JwtSecret:Secret");
+            string secret = _config.GetValue<string>("JwtSecret");
             _secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         }
 

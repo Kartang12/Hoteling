@@ -20,9 +20,14 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
-var mapperConfig = new MapperConfiguration(mc =>
+//var mapperConfig = new MapperConfiguration(mc =>
+//{
+//    mc.AddProfile(new MappingProfile());
+//});
+
+builder.Services.AddAutoMapper(mc =>
 {
     mc.AddProfile(new MappingProfile());
 });

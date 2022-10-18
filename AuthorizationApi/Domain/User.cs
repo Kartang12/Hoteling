@@ -1,4 +1,6 @@
-﻿namespace AuthorizationApi.Domain
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace AuthorizationApi.Domain
 {
     public class User
     {

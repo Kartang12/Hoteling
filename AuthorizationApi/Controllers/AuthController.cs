@@ -1,10 +1,13 @@
 ﻿using AuthorizationApi.Contracts.Requests;
 using AuthorizationApi.Models.Requests;
 using AuthorizationApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthorizationApi.Controllers
 {
+    [Route("[controller]/[action]")]
+    [ApiController]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -12,7 +15,7 @@ namespace AuthorizationApi.Controllers
         {
             _authService = tokenService;
         }
-        [HttpPost, Route("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             if (request is null)
@@ -23,7 +26,7 @@ namespace AuthorizationApi.Controllers
                 Unauthorized(result);
         }
         
-        [HttpPost, Route("register")]
+        [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (request is null)
@@ -35,8 +38,7 @@ namespace AuthorizationApi.Controllers
         }
 
         [HttpPost]
-        [Route("refresh")]
-        public async Task<IActionResult> Refresh(RefreshTokenRequest request)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
         {
             if (request is null)
                 return BadRequest("Invalid client request");
@@ -44,6 +46,13 @@ namespace AuthorizationApi.Controllers
             return result.Success ?
                 Ok(result) :
                 Unauthorized(result);
+        }
+        
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetRoles([FromBody] GetRolesRequest request)
+        {
+            return Ok(_authService.GetRole(request));
         }
     }
 }

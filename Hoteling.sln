@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReviewApi", "ReviewApi\Revi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserApi", "UserApi\UserApi.csproj", "{330BAEE6-2BB3-4F87-B368-64FF2C6AC70C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelingLibrary", "HotelingLibrary\HotelingLibrary.csproj", "{CCA18415-0BE0-4418-852C-67896342E697}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{330BAEE6-2BB3-4F87-B368-64FF2C6AC70C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{330BAEE6-2BB3-4F87-B368-64FF2C6AC70C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{330BAEE6-2BB3-4F87-B368-64FF2C6AC70C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCA18415-0BE0-4418-852C-67896342E697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCA18415-0BE0-4418-852C-67896342E697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCA18415-0BE0-4418-852C-67896342E697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCA18415-0BE0-4418-852C-67896342E697}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

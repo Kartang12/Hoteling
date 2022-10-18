@@ -1,6 +1,8 @@
 ﻿using BookingApi.Contracts.Requests;
 using BookingApi.Domain;
 using BookingApi.Services;
+//using BookingApi.Attributes;
+using HotelingLibrary;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingApi.Controllers
@@ -9,14 +11,16 @@ namespace BookingApi.Controllers
     [ApiController]
     public class BookingController : Controller
     {
-        private readonly BookingService _service;
+        private readonly IBookingService _service;
 
-        public BookingController(BookingService service)
+        public BookingController(IBookingService service)
         {
             _service = service;
         }
 
         [HttpGet]
+        [RoleFilter(UserRolesEnum.Admin)]
+        //[RoleFilter("Admin")]
         public async Task<IActionResult> Get()
         {
             return Ok("q113");
