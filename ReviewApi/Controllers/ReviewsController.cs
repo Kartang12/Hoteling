@@ -9,11 +9,17 @@ namespace ReviewApi.Controllers
     [ApiController]
     public class ReviewsController : Controller
     {
-        private readonly ReviewService _service;
+        private readonly IReviewService _service;
 
-        public ReviewsController(ReviewService service)
+        public ReviewsController(IReviewService service)
         {
             _service = service;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("q113");
         }
 
         [HttpGet]

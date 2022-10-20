@@ -9,11 +9,17 @@ namespace UserApi.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        readonly UserService _service;
+        readonly IUserService _service;
 
-        public UserController(UserService service)
+        public UserController(IUserService service)
         {
             _service = service;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("q113");
         }
 
         [HttpGet]

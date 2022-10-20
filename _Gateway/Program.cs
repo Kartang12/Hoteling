@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using _Gateway.Middlewares;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -6,13 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Configuration.AddJsonFile("ocelot.json");
-builder.Services.AddMvc();
+
 builder.Services.AddOcelot();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gateway API", Version = "v1" });
-//});
-builder.Services.AddSwaggerForOcelot(builder.Configuration);
+builder.Services.AddHttpClient("RoleClient", config => {
+    config.BaseAddress = new Uri(builder.Configuration["AuthServece:GetRoleUrl"]);
+});
+builder.Services.AddSingleton<OcelotAuthorizationMiddleware>();
 
 var app = builder.Build();
 
@@ -23,17 +22,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-//app.UseSwagger();
-//app.UseSwaggerUI(options =>
-//{
-//    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-//    options.RoutePrefix = string.Empty;
-//});
-app.UseSwaggerForOcelotUI(opt =>
+var authMiddleware = app.Services.GetRequiredService<OcelotAuthorizationMiddleware>();
+var ocelotConfiguration = new OcelotPipelineConfiguration
 {
-    opt.PathToSwaggerGenerator = "/swagger/docs";
-});
+    AuthorizationMiddleware = async (context, next) => await authMiddleware.InvokeAsync(context, next)
+};
 
-//app.UseAuthorization();
-app.UseOcelot().Wait();
+app.UseOcelot(ocelotConfiguration).Wait();
 app.Run();

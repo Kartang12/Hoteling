@@ -1,6 +1,6 @@
-﻿namespace AuthorizationApi.Models.Requests
+﻿namespace AuthorizationApi.Contracts.Requests
 {
-    public class UserRegisterRequest
+    public class LoginRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }

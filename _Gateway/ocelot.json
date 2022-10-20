@@ -1,5 +1,18 @@
 {
-  "ReRoutes": [
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/auth/{everything}",
+      "DownstreamScheme": "https",
+      "SwaggerKey": "auth",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
     {
       "DownstreamPathTemplate": "/booking/{everything}",
       "DownstreamScheme": "https",
@@ -27,6 +40,19 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
+      "DownstreamPathTemplate": "/room/{everything}",
+      "DownstreamScheme": "https",
+      "SwaggerKey": "hoteling",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/room/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {
       "DownstreamPathTemplate": "/reviews/{everything}",
       "DownstreamScheme": "https",
       "SwaggerKey": "reviews",
@@ -40,7 +66,7 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
-      "DownstreamPathTemplate": "/users/{everything}",
+      "DownstreamPathTemplate": "/user/{everything}",
       "DownstreamScheme": "https",
       "SwaggerKey": "users",
       "DownstreamHostAndPorts": [
@@ -49,52 +75,52 @@
           "Port": 5004
         }
       ],
-      "UpstreamPathTemplate": "/users/{everything}",
+      "UpstreamPathTemplate": "/user/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     }
   ],
-  "SwaggerEndPoints": [
-    {
-      "Key": "booking",
-      "Config": [
-        {
-          "Name": "Booking API",
-          "Version": "v1",
-          "Url": "https://localhost:5001/swagger/v1/swagger.json"
-        }
-      ]
-    },
-    {
-      "Key": "hoteling",
-      "Config": [
-        {
-          "Name": "Hoteling API",
-          "Version": "v1",
-          "Url": "https://localhost:5002/swagger/v1/swagger.json"
-        }
-      ]
-    },
-    {
-      "Key": "reviews",
-      "Config": [
-        {
-          "Name": "Review API",
-          "Version": "v1",
-          "Url": "https://localhost:5003/swagger/v1/swagger.json"
-        }
-      ]
-    },
-    {
-      "Key": "user",
-      "Config": [
-        {
-          "Name": "User API",
-          "Version": "v1",
-          "Url": "https://localhost:5004/swagger/v1/swagger.json"
-        }
-      ]
-    },
-  ],
+  //"SwaggerEndPoints": [
+  //  {
+  //    "Key": "booking",
+  //    "Config": [
+  //      {
+  //        "Name": "Booking API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5001/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "Key": "hoteling",
+  //    "Config": [
+  //      {
+  //        "Name": "Hoteling API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5002/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "Key": "reviews",
+  //    "Config": [
+  //      {
+  //        "Name": "Review API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5003/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "Key": "user",
+  //    "Config": [
+  //      {
+  //        "Name": "User API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5004/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7192"
   }
