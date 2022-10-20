@@ -2,7 +2,7 @@
 
 namespace HotelingLibrary
 {
-    public class RoleFilterAttribute : ActionFilterAttribute
+    public class RoleFilterAttribute : Attribute, IAuthorizationFilter
     {
         private readonly UserRolesEnum _role;
 
@@ -11,12 +11,12 @@ namespace HotelingLibrary
             _role = role;
         }
 
-        public override void OnResultExecuting(ResultExecutingContext context)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
             var header = context.HttpContext.Request.Headers["Role"].ToString();
-            if(String.IsNullOrEmpty(header))
+            if (String.IsNullOrEmpty(header))
             {
-                throw new UnauthorizedAccessException("You don't have permission");
+                throw new UnauthorizedAccessException("Unable to verify permission");
             }
             var role = Enum.Parse<UserRolesEnum>(header);
 
@@ -26,7 +26,21 @@ namespace HotelingLibrary
             {
                 throw new UnauthorizedAccessException("You don't have permission");
             }
-
         }
+
+        //public override void OnResultExecuting(ResultExecutingContext context)
+        //{
+        //    var header = context.HttpContext.Request.Headers["Role"].ToString();
+        //    if(String.IsNullOrEmpty(header))
+        //    {
+        //        throw new UnauthorizedAccessException("Unable to verify permission");
+        //    }
+        //    var role = Enum.Parse<UserRolesEnum>(header);
+        //    //var role = context.HttpContext.Request.Headers["Role"];
+        //    if (role != _role)
+        //    {
+        //        throw new UnauthorizedAccessException("You don't have permission");
+        //    }
+        //}
     }
 }

@@ -9,9 +9,9 @@ namespace HotelApi.Controllers
     [ApiController]
     public class HotelController : Controller
     {
-        private readonly HotelService _service;
+        private readonly IHotelService _service;
 
-        public HotelController(HotelService service)
+        public HotelController(IHotelService service)
         {
             _service = service;
         }

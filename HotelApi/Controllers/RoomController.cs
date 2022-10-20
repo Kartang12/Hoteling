@@ -9,11 +9,17 @@ namespace HotelApi.Controllers
     [ApiController]
     public class RoomController : Controller
     {
-        private readonly RoomService _service;
+        private readonly IRoomService _service;
 
-        public RoomController(RoomService service)
+        public RoomController(IRoomService service)
         {
             _service = service;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("q113");
         }
 
         [HttpGet]

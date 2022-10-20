@@ -15,7 +15,7 @@ namespace AuthorizationApi.Services
         Task<RegistrationResponse> RegisterAsync(RegisterRequest request);
         Task<AuthenticationResponse> LogInAsync(LoginRequest request);
         Task<AuthenticationResponse> RefreshAsync(RefreshTokenRequest request);
-        Task<UserRolesEnum> GetRole(GetRolesRequest request);
+        Task<string> GetRole(string userToken);
     }
 
     public class AuthService : IAuthService
@@ -72,7 +72,8 @@ namespace AuthorizationApi.Services
                 }; 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, request.Email),
+                new Claim("UserId", user.Id.ToString()),
+                new Claim(ClaimTypes.Email, request.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var accessToken = _tokenService.GenerateAccessToken(claims);
@@ -114,9 +115,9 @@ namespace AuthorizationApi.Services
             };
         }
 
-        public async Task<UserRolesEnum> GetRole(GetRolesRequest request)
+        public async Task<string> GetRole(string userToken)
         {
-            return await _userContext.Users.Where(x => x.Id == request.UserId).Select(x => x.Role).SingleOrDefaultAsync();
+            return _tokenService.GetRole(userToken);
         }
     }
 }

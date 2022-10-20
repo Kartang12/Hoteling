@@ -1,5 +1,4 @@
-﻿using AuthorizationApi.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -12,6 +11,7 @@ namespace AuthorizationApi.Services
         string GenerateAccessToken(IEnumerable<Claim> claims);
         string GenerateRefreshToken();
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        string GetRole(string userToken);
     }
 
     public class TokenService : ITokenService
@@ -66,6 +66,12 @@ namespace AuthorizationApi.Services
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
             return principal;
+        }
+
+        public string GetRole(string userToken)
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(userToken);
+            return jwt.Claims.First(c => c.Type == ClaimTypes.Role).Value;
         }
     }
 }

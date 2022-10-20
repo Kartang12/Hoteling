@@ -3,6 +3,8 @@ using AuthorizationApi.Models.Requests;
 using AuthorizationApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace AuthorizationApi.Controllers
 {
@@ -50,9 +52,9 @@ namespace AuthorizationApi.Controllers
         
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetRoles([FromBody] GetRolesRequest request)
+        public async Task<IActionResult> GetRole([FromHeader] string authorization)
         {
-            return Ok(_authService.GetRole(request));
+            return Ok(_authService.GetRole(authorization.Remove(0,7)));
         }
     }
 }
