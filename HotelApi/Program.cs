@@ -2,6 +2,7 @@ using AutoMapper;
 using HotelApi.DbContext;
 using HotelApi.Mapping;
 using HotelApi.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -17,9 +18,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
-
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+
+builder.Services.AddMassTransit(config => {
+    config.UsingRabbitMq((ctx, cfg) => {
+        cfg.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
+    });
+});
 
 var mapperConfig = new MapperConfiguration(mc =>
 {

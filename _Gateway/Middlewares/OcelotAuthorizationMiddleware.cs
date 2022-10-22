@@ -22,7 +22,7 @@ namespace _Gateway.Middlewares
                 var response = await client.GetAsync("https://localhost:5000/Auth/GetRole");
                 //JObject role = JObject.Parse(response.Content.ReadAsStringAsync().Result);
                 //var x = role["result"].ToString();
-                //context.Request.Headers.Add("Role", x);
+                context.Request.Headers.Add("Role", "0");
             }
 
             await next.Invoke();

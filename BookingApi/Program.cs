@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BookingApi.Services;
 using AutoMapper;
 using BookingApi.Mapping;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,20 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
-
 builder.Services.AddScoped<IBookingService, BookingService>();
+
+builder.Services.AddMassTransit(config => {
+    config.AddConsumer<BasketCheckoutConsumer>();
+    config.UsingRabbitMq((ctx, cfg) => {
+        cfg.Host(Configuration[“EventBusSettings: HostAddress”]);
+
+        cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c => {
+            c.ConfigureConsumer<BasketCheckoutConsumer>(ctx);
+        });
+    });
+});
+services.AddMassTransitHostedService();
+
 
 var mapperConfig = new MapperConfiguration(mc =>
 {

@@ -4,6 +4,7 @@ using BookingApi.DbContext;
 using BookingApi.Domain;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MassTransit;
 
 namespace BookingApi.Services
 {
@@ -20,11 +21,13 @@ namespace BookingApi.Services
     {
         private readonly BookingContext _context;
         private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public BookingService(IMapper mapper, BookingContext context = null)
+        public BookingService(IMapper mapper, BookingContext context = null, IPublishEndpoint publishEndpoint = null)
         {
             _mapper = mapper;
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<IEnumerable<Booking>> GetByIdsAsync(IEnumerable<Guid> ids)
