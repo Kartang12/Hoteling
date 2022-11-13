@@ -1,6 +1,6 @@
 ﻿namespace HotelingLibrary.Messages
 {
-    public class ReviewDataChangedEvent : EventBase
+    public class ReviewDataChangedMessage : MessageBase
     {
         public Guid  HotelId { get; set; }
         public Guid UserId { get; set; }

@@ -1,5 +1,10 @@
 {
   "Routes": [
+    //{
+    //  "AddHeadersToRequest": {
+    //    "Role": "0"
+    //  }
+    //},
     {
       "DownstreamPathTemplate": "/auth/{everything}",
       "DownstreamScheme": "https",

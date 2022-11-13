@@ -1,7 +1,12 @@
+using AuthorizationApi.Consumeres;
 using AuthorizationApi.Context;
 using AuthorizationApi.Services;
+using HotelingLibrary;
+using HotelingLibrary.Messages;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -66,6 +71,19 @@ builder.Services.AddControllers();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddMassTransit(config => {
+    config.AddConsumer<UserChangedConsumer>();
+
+    config.UsingRabbitMq((ctx, cfg) => {
+        cfg.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
+        cfg.ReceiveEndpoint(QueuesUrls.User_ReviewsDeleted, c => {
+            c.ConfigureConsumer<UserChangedConsumer>(ctx);
+        });
+
+    });
+});
+
 
 var app = builder.Build();
 

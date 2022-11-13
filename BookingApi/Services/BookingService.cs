@@ -5,11 +5,13 @@ using BookingApi.Domain;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MassTransit;
+using HotelingLibrary.Messages;
 
 namespace BookingApi.Services
 {
     public interface IBookingService
     {
+        void Get();
         Task<IEnumerable<Booking>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task<Booking> GetById(Guid id);
         Task<BookingResponse> CreateAsync(BookingRequest request);
@@ -22,6 +24,15 @@ namespace BookingApi.Services
         private readonly BookingContext _context;
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
+
+        public void Get()
+        {
+            _publishEndpoint.Publish(new HotelDataChangedMessage()
+            {
+                Name = "test"
+            });
+
+        }
 
         public BookingService(IMapper mapper, BookingContext context = null, IPublishEndpoint publishEndpoint = null)
         {

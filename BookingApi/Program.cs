@@ -5,6 +5,8 @@ using BookingApi.Services;
 using AutoMapper;
 using BookingApi.Mapping;
 using MassTransit;
+using BookingApi.Consumers;
+using HotelingLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,16 +24,28 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddMassTransit(config => {
-    config.AddConsumer<BasketCheckoutConsumer>();
-    config.UsingRabbitMq((ctx, cfg) => {
-        cfg.Host(Configuration[“EventBusSettings: HostAddress”]);
+    config.AddConsumer<HotelChangedConsumer>();
+    config.AddConsumer<HotelDeletedConsumer>();
+    config.AddConsumer<RoomChangedConsumer>();
+    config.AddConsumer<RoomDeletedConsumer>();
 
-        cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c => {
-            c.ConfigureConsumer<BasketCheckoutConsumer>(ctx);
+    config.UsingRabbitMq((context, configuration) => {
+        configuration.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
+
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_HotelChanged, c => {
+            c.ConfigureConsumer<HotelChangedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_HotelDeleted, c => {
+            c.ConfigureConsumer<HotelDeletedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_RoomChanged, c => {
+            c.ConfigureConsumer<RoomChangedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_RoomDeleted, c => {
+            c.ConfigureConsumer<RoomDeletedConsumer>(context);
         });
     });
 });
-services.AddMassTransitHostedService();
 
 
 var mapperConfig = new MapperConfiguration(mc =>

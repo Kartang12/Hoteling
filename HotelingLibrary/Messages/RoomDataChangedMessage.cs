@@ -1,6 +1,6 @@
 ﻿namespace HotelingLibrary.Messages
 {
-    public class RoomDataChangedEvent : EventBase
+    public class RoomDataChangedMessage : MessageBase
     {
         public Guid HotelId { get; set; }
         public int Number { get; set; }

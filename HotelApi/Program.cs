@@ -20,12 +20,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddTransient<IRabbitMqService, RabbitMqService>();
 
 builder.Services.AddMassTransit(config => {
     config.UsingRabbitMq((ctx, cfg) => {
         cfg.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
     });
 });
+
+builder.Services.AddSingleton<IBus>(p => p.GetRequiredService<IBusControl>());
 
 var mapperConfig = new MapperConfiguration(mc =>
 {

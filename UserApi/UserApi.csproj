@@ -27,4 +27,8 @@
     <Folder Include="Contracts\Responses\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HotelingLibrary\HotelingLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

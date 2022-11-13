@@ -1,6 +1,6 @@
 ﻿namespace HotelingLibrary.Messages
 {
-    public enum OperationTypeEnum
+    public enum OperationTypeMessage
     {
         Add = 0,
         Update,
