@@ -20,7 +20,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
-builder.Services.AddTransient<IRabbitMqService, RabbitMqService>();
 
 builder.Services.AddMassTransit(config => {
     config.UsingRabbitMq((ctx, cfg) => {

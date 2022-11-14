@@ -2,12 +2,9 @@
 using HotelApi.Contracts.Requests;
 using HotelApi.DbContext;
 using HotelApi.Domain;
-using HotelingLibrary;
 using HotelingLibrary.Messages;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using static MassTransit.ValidationResultExtensions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace HotelApi.Services
 {
@@ -22,23 +19,18 @@ namespace HotelApi.Services
 
     public class HotelService : IHotelService
     {
-        private readonly IBus _bus;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly IRabbitMqService _rabbitMqService;
         private readonly HotelingContext _context;
         private readonly IMapper _mapper;
 
         public HotelService(HotelingContext context,
             IMapper mapper,
             IBus bus,
-            IPublishEndpoint publishEndpoint,
-            IRabbitMqService rabbitMqService)
+            IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _mapper = mapper;
-            _bus = bus;
             _publishEndpoint = publishEndpoint;
-            _rabbitMqService = rabbitMqService;
         }
 
         public async Task<IEnumerable<Hotel>> GetByIdsAsync(IEnumerable<Guid> ids)
@@ -63,10 +55,8 @@ namespace HotelApi.Services
         {
             var toDelete = await _context.Hotels.FirstOrDefaultAsync(x => x.Id == id);
             var deletedEntity = _context.Hotels.Remove(toDelete);
-
             var deleteMessage = _mapper.Map<HotelDeletedMessage>(deletedEntity.Entity);
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{QueuesUrls.Booking_HotelDeleted}"));
-            await endpoint.Send(deleteMessage);
+            await _publishEndpoint.Publish(deleteMessage);
             await _context.SaveChangesAsync();
         }
 
@@ -74,10 +64,7 @@ namespace HotelApi.Services
         {
             var result = _context.Hotels.Update(toUpdate);
             var updateMessage = _mapper.Map<HotelDataChangedMessage>(result.Entity);
-            _rabbitMqService.SendMessage(updateMessage, "HotelUpdate");
-            //var endpoint = await _bus.GetPublishSendEndpoint<HotelDataChangedMessage>();
-            //await endpoint.Send(updateMessage);
-            //_publishEndpoint.Publish(updateEvent);
+            await _publishEndpoint.Publish(updateMessage);
             await _context.SaveChangesAsync();
             return result.Entity;
         }

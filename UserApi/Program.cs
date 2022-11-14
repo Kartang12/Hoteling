@@ -27,13 +27,13 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddMassTransit(config => {
-    config.AddConsumer<ReviewsDeletedConsummer>();
+    config.AddConsumer<ReviewDeletedConsummer>();
 
     config.UsingRabbitMq((context, configuration) =>
     {
         configuration.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
         configuration.ReceiveEndpoint(QueuesUrls.ReviewsDeleted, c =>{
-            c.ConfigureConsumer<ReviewsDeletedConsummer>(context);
+            c.ConfigureConsumer<ReviewDeletedConsummer>(context);
         });
     });
 });

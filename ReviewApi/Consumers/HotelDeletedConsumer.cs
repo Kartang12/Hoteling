@@ -23,7 +23,7 @@ namespace ReviewApi.Consumers
             _context.Reviews.RemoveRange(reviews);
             var ids = reviews.Select(x => x.Id).ToList();
             var endpoint = await _bus.GetSendEndpoint(new Uri($"queue{QueuesUrls.User_ReviewsDeleted}"));
-            endpoint.Send(new ReviewsDeletedMessage() { UsersDeletedReviews = ids });
+            endpoint.Send(new ReviewDeletedMessage() { UsersDeletedReviews = ids });
             await _context.SaveChangesAsync();
         }
     }

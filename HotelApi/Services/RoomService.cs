@@ -2,11 +2,9 @@
 using HotelApi.Contracts.Requests;
 using HotelApi.DbContext;
 using HotelApi.Domain;
-using HotelingLibrary;
 using HotelingLibrary.Messages;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using static MassTransit.ValidationResultExtensions;
 
 namespace HotelApi.Services
 {
@@ -21,15 +19,15 @@ namespace HotelApi.Services
 
     public class RoomService : IRoomService
     {
-        private readonly IBus _bus;
+        private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
         private readonly HotelingContext _context;
 
-        public RoomService(HotelingContext context, IMapper mapper, IBus bus)
+        public RoomService(HotelingContext context, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _mapper = mapper;
-            _bus = bus;
+            _publishEndpoint = publishEndpoint;
         }
 
 
@@ -55,10 +53,8 @@ namespace HotelApi.Services
         {
             var toDelete = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
             var deletedEntity = _context.Rooms.Remove(toDelete);
-
             var deleteMessage = _mapper.Map<RoomDeletedMessage>(deletedEntity.Entity);
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{QueuesUrls.Booking_RoomDeleted}"));
-            await endpoint.Send(deleteMessage);
+            await _publishEndpoint.Publish(deleteMessage);
             await _context.SaveChangesAsync();
         }
 
@@ -66,8 +62,7 @@ namespace HotelApi.Services
         {
             var result = _context.Rooms.Update(toUpdate);
             var updateEvent = _mapper.Map<RoomDataChangedMessage>(result.Entity);
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{QueuesUrls.Booking_RoomChanged}"));
-            await endpoint.Send(updateEvent);
+            await _publishEndpoint.Publish(updateEvent);
             await _context.SaveChangesAsync();
             return toUpdate;
         }

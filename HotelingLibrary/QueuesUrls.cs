@@ -13,6 +13,7 @@
         public static string Auth_UserChanged = "Auth_UserChanged";
         public static string Auth_UserDeleted = "Auth_UserDeleted";
 
-        public static string User_ReviewsDeleted = "User_ReviewsDeleted";
+        public static string User_ReviewDeleted = "User_ReviewDeleted";
+        public static string User_ReviewAdded= "User_ReviewAdded";
     }
 }
