@@ -75,7 +75,7 @@ builder.Services.AddMassTransit(config => {
 
     config.UsingRabbitMq((ctx, cfg) => {
         cfg.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
-        cfg.ReceiveEndpoint(QueuesUrls.User_ReviewsDeleted, c => {
+        cfg.ReceiveEndpoint(QueuesUrls.User_ReviewDeleted, c => {
             c.ConfigureConsumer<UserChangedConsumer>(ctx);
         });
 
