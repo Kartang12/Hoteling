@@ -14,10 +14,13 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
-      "AddHeadersToRequest": {
-        //"Role": "Claims[Role] > value"
-      //"RouteClaimsRequirement": {
-        "Test": "Test"
+      //"AddHeadersToRequest": {
+      //  //"Role": "Claims[Role] > value"
+      //  //"RouteClaimsRequirement": {
+      //  "Test": "Test"
+      //},
+      "UpstreamHeaderTransform": {
+        "Role": "Claims[Role] > value"
       },
       "DownstreamPathTemplate": "/booking/{everything}",
       "DownstreamScheme": "https",
