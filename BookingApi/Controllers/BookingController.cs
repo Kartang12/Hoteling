@@ -18,7 +18,7 @@ namespace BookingApi.Controllers
         }
 
         [HttpGet]
-        [RoleFilter(UserRolesEnum.Admin)]
+        //[RoleFilter(UserRolesEnum.Admin)]
         public async Task<IActionResult> Get()
         {
             _service.Get();

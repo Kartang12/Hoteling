@@ -22,7 +22,7 @@ namespace ReviewApi.Consumers
             var reviews = _context.Reviews.Where(x => x.HotelId == consumeContext.Message.EntityId).ToList();
             _context.Reviews.RemoveRange(reviews);
             var ids = reviews.Select(x => x.Id).ToList();
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue{QueuesUrls.User_ReviewsDeleted}"));
+            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue{QueuesUrls.User_ReviewDeleted}"));
             endpoint.Send(new ReviewDeletedMessage() { UsersDeletedReviews = ids });
             await _context.SaveChangesAsync();
         }

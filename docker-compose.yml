@@ -1,44 +1,93 @@
 version: '3.4'
+name: Hoteling project
 
 services:
-  gateway:
-    image: eshop/webmvc
-    ports:
-      - "5100:80"
-    
-  auth-api:
-    image: eshop/catalog-api
-    expose:
-      - "80"
-    ports:
-      - "5101:80"
-    #extra hosts can be used for standalone SQL Server or services at the dev PC
-    
-  user-api:
-    image: eshop/ordering-api
-    ports:
-      - "5102:80"
-    #extra hosts can be used for standalone SQL Server or services at the dev PC
-    
-  hotel-api:
-    image: eshop/basket-api
-    ports:
-      - "5103:80"
-
-  booking-api:
-    image: eshop/basket-api
-    ports:
-      - "5103:80"
-
-  review-api:
-    image: eshop/basket-api
-    ports:
-      - "5103:80"
-
-
-  sqldata:
+  database:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: 'SQL_Server'
     environment:
-      - SA_PASSWORD=[PLACEHOLDER]
+      - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
       - "5434:1433"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - rabbitmq_go
+
+
+  _gateway:
+    image: ${DOCKER_REGISTRY-}gateway
+    ports:
+      - "7192:7192"
+    build:
+      context: .
+      dockerfile: _Gateway/Dockerfile
+
+
+  authorizationapi:
+    image: ${DOCKER_REGISTRY-}authorizationapi
+    ports:
+      - "5000:5000"
+    build:
+      context: .
+      dockerfile: AuthorizationApi/Dockerfile
+    networks:
+        - rabbitmq_go
+
+
+  bookingapi:
+    image: ${DOCKER_REGISTRY-}bookingapi
+    ports:
+      - "5001:5001"
+    build:
+      context: .
+      dockerfile: BookingApi/Dockerfile
+    networks:
+        - rabbitmq_go
+
+
+  hotelapi:
+    image: ${DOCKER_REGISTRY-}hotelapi
+    ports:
+      - "5002:5002"
+    build:
+      context: .
+      dockerfile: HotelApi/Dockerfile
+    networks:
+        - rabbitmq_go
+
+
+  reviewapi:
+    image: ${DOCKER_REGISTRY-}reviewapi
+    ports:
+      - "5003:5003"
+    build:
+      context: .
+      dockerfile: ReviewApi/Dockerfile
+    networks:
+        - rabbitmq_go
+
+
+  userapi:
+    image: ${DOCKER_REGISTRY-}userapi
+    ports:
+      - "5004:5004"
+    build:
+      context: .
+      dockerfile: UserApi/Dockerfile
+    networks:
+        - rabbitmq_go
+
+
+networks:
+  rabbitmq_go:
+    driver: bridge

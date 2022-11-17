@@ -1,21 +1,13 @@
-﻿{
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "https://localhost:5051",
-      "sslPort": 44367
-    }
-  },
+{
   "profiles": {
     "BookingApi": {
-      "commandName": "Project", 
-      "dotnetRunMessages": true,
+      "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001;https://localhost:5205",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:5001;https://localhost:5205"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -23,6 +15,22 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "applicationUrl": "https://localhost:5001;https://localhost:5205"
+      //"launchBrowser": true,
+      //"launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      //"publishAllPorts": true,
+      //"useSSL": true
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "https://localhost:5051",
+      "sslPort": 44367
     }
   }
 }

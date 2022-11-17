@@ -60,7 +60,7 @@ namespace UserApi.Services
         {
             var result = _context.Users.Update(toUpdate);
             var message = _mapper.Map<UserDataChangedMessage>(result);
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{QueuesUrls.UserChanged}"));
+            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{QueuesUrls.Auth_UserChanged}"));
             endpoint.Send(message);
             await _context.SaveChangesAsync();
             return result.Entity;

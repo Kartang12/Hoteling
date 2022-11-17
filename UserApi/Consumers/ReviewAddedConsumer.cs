@@ -17,14 +17,14 @@ namespace UserApi.Consumers
         public async Task Consume(ConsumeContext<ReviewAddedMessage> consumeContext)
         {
             List<UserData> updatedUsers = new List<UserData>();
-            consumeContext.Message.UsersDeletedReviews.ForEach(
-                x =>
-                {
-                    var user = _context.Users.First(u => u.UserId == x);
-                    user.ReviewsAmount++;
-                    updatedUsers.Add(user);
-                });
-            _context.Users.UpdateRange(updatedUsers);
+            //consumeContext.Message.UsersDeletedReviews.ForEach(
+            //    x =>
+            //    {
+            //        var user = _context.Users.First(u => u.UserId == x);
+            //        user.ReviewsAmount++;
+            //        updatedUsers.Add(user);
+            //    });
+            //_context.Users.UpdateRange(updatedUsers);
             await _context.SaveChangesAsync();
         }
     }

@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserApi", "UserApi\UserApi.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelingLibrary", "HotelingLibrary\HotelingLibrary.csproj", "{CCA18415-0BE0-4418-852C-67896342E697}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9A91D0DB-831D-4351-B832-F73F6689645D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{CCA18415-0BE0-4418-852C-67896342E697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCA18415-0BE0-4418-852C-67896342E697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCA18415-0BE0-4418-852C-67896342E697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A91D0DB-831D-4351-B832-F73F6689645D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A91D0DB-831D-4351-B832-F73F6689645D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A91D0DB-831D-4351-B832-F73F6689645D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A91D0DB-831D-4351-B832-F73F6689645D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
