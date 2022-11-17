@@ -2,6 +2,8 @@
 using HotelApi.Contracts.Requests;
 using HotelApi.DbContext;
 using HotelApi.Domain;
+using HotelingLibrary.Messages;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelApi.Services
@@ -17,8 +19,17 @@ namespace HotelApi.Services
 
     public class RoomService : IRoomService
     {
-        private readonly HotelingContext _context;
+        private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
+        private readonly HotelingContext _context;
+
+        public RoomService(HotelingContext context, IMapper mapper, IPublishEndpoint publishEndpoint)
+        {
+            _context = context;
+            _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
+        }
+
 
         public async Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids)
         {
@@ -41,12 +52,18 @@ namespace HotelApi.Services
         public async Task DeleteAsync(Guid id)
         {
             var toDelete = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
-            _context.Rooms.Remove(toDelete);
+            var deletedEntity = _context.Rooms.Remove(toDelete);
+            var deleteMessage = _mapper.Map<RoomDeletedMessage>(deletedEntity.Entity);
+            await _publishEndpoint.Publish(deleteMessage);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Room> UpdateAsync(Room toUpdate)
         {
-            _context.Rooms.Update(toUpdate);
+            var result = _context.Rooms.Update(toUpdate);
+            var updateEvent = _mapper.Map<RoomDataChangedMessage>(result.Entity);
+            await _publishEndpoint.Publish(updateEvent);
+            await _context.SaveChangesAsync();
             return toUpdate;
         }
     }

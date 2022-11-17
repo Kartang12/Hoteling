@@ -1,13 +1,14 @@
 using AutoMapper;
+using HotelingLibrary;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ReviewApi.Consumers;
 using ReviewApi.DbContext;
 using ReviewApi.Mapping;
 using ReviewApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ReviewsContext>(options => options.UseSqlServer(connectionString));
@@ -22,11 +23,26 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IReviewService, ReviewService>();
 
+builder.Services.AddMassTransit(config => {
+    config.AddConsumer<HotelChangedConsumer>();
+    config.AddConsumer<HotelDeletedConsumer>();
+
+    config.UsingRabbitMq((context, configuration) => {
+        configuration.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
+
+        configuration.ReceiveEndpoint(QueuesUrls.Review_HotelChanged, c => {
+            c.ConfigureConsumer<HotelChangedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Review_HotelDeleted, c => {
+            c.ConfigureConsumer<HotelDeletedConsumer>(context);
+        });
+    });
+});
+
 var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new MappingProfile());
 });
-
 
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);

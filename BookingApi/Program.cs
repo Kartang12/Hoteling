@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using BookingApi.Services;
 using AutoMapper;
 using BookingApi.Mapping;
+using MassTransit;
+using BookingApi.Consumers;
+using HotelingLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +21,32 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
-
 builder.Services.AddScoped<IBookingService, BookingService>();
+
+builder.Services.AddMassTransit(config => {
+    config.AddConsumer<HotelChangedConsumer>();
+    config.AddConsumer<HotelDeletedConsumer>();
+    config.AddConsumer<RoomChangedConsumer>();
+    config.AddConsumer<RoomDeletedConsumer>();
+
+    config.UsingRabbitMq((context, configuration) => {
+        configuration.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
+
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_HotelChanged, c => {
+            c.ConfigureConsumer<HotelChangedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_HotelDeleted, c => {
+            c.ConfigureConsumer<HotelDeletedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_RoomChanged, c => {
+            c.ConfigureConsumer<RoomChangedConsumer>(context);
+        });
+        configuration.ReceiveEndpoint(QueuesUrls.Booking_RoomDeleted, c => {
+            c.ConfigureConsumer<RoomDeletedConsumer>(context);
+        });
+    });
+});
+
 
 var mapperConfig = new MapperConfiguration(mc =>
 {

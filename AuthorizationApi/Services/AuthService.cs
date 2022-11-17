@@ -74,7 +74,8 @@ namespace AuthorizationApi.Services
             {
                 new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Email, request.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim("Role", user.Role.ToString()),
+                //new Claim("Test", "Test")
             };
             var accessToken = _tokenService.GenerateAccessToken(claims);
             var refreshToken = _tokenService.GenerateRefreshToken();

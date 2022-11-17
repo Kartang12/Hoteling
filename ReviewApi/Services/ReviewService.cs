@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using HotelingLibrary.Messages;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ReviewApi.Contracts.Requests;
 using ReviewApi.DbContext;
@@ -17,13 +19,15 @@ namespace ReviewApi.Services
 
     public class ReviewService : IReviewService
     {
+        readonly IPublishEndpoint _publishEndpoint;
         readonly ReviewsContext _context;
         private readonly IMapper _mapper;
 
-        public ReviewService(ReviewsContext context, IMapper mapper)
+        public ReviewService(ReviewsContext context, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
 
@@ -43,6 +47,8 @@ namespace ReviewApi.Services
             newReview.Id = Guid.NewGuid();
             newReview.Date = DateTime.Now;
             var result = await _context.Reviews.AddAsync(newReview);
+            var addMessage = _mapper.Map<ReviewAddedMessage>(result);
+            await _publishEndpoint.Publish(addMessage);
             return result.Entity;
         }
 

@@ -1,9 +1,13 @@
-using UserApi.DbContext;
+using HotelingLibrary;
+using HotelingLibrary.Messages;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
-using UserApi.Services;
-using AutoMapper;
+using UserApi.Consumers;
+using UserApi.DbContext;
 using UserApi.Mapping;
+using UserApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +24,19 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
-//var mapperConfig = new MapperConfiguration(mc =>
-//{
-//    mc.AddProfile(new MappingProfile());
-//});
+builder.Services.AddMassTransit(config => {
+    config.AddConsumer<ReviewDeletedConsummer>();
+
+    config.UsingRabbitMq((context, configuration) =>
+    {
+        configuration.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
+        configuration.ReceiveEndpoint(QueuesUrls.ReviewsDeleted, c =>{
+            c.ConfigureConsumer<ReviewDeletedConsummer>(context);
+        });
+    });
+});
 
 builder.Services.AddAutoMapper(mc =>
 {
