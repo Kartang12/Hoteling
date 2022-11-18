@@ -10,6 +10,10 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "5434:1433"
+    volumes:
+      - /var/opt/mssql
+    networks:
+      - localNetwork
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -21,7 +25,8 @@ services:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
-        - rabbitmq_go
+        - localNetwork
+
 
 
   _gateway:
@@ -31,6 +36,15 @@ services:
     build:
       context: .
       dockerfile: _Gateway/Dockerfile
+    depends_on:
+      - authorizationapi
+      - bookingapi
+      - hotelapi
+      - reviewapi
+      - userapi
+    networks:
+      - localNetwork 
+
 
 
   authorizationapi:
@@ -40,19 +54,27 @@ services:
     build:
       context: .
       dockerfile: AuthorizationApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
     networks:
-        - rabbitmq_go
+      - localNetwork
 
 
   bookingapi:
     image: ${DOCKER_REGISTRY-}bookingapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
     ports:
       - "5001:5001"
     build:
       context: .
-      dockerfile: BookingApi/Dockerfile
+      dockerfile: BookingApi/Dockerfile    
+    depends_on:
+      - rabbitmq
+      - database
     networks:
-        - rabbitmq_go
+      - localNetwork
 
 
   hotelapi:
@@ -62,8 +84,11 @@ services:
     build:
       context: .
       dockerfile: HotelApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
     networks:
-        - rabbitmq_go
+      - localNetwork
 
 
   reviewapi:
@@ -73,8 +98,11 @@ services:
     build:
       context: .
       dockerfile: ReviewApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
     networks:
-        - rabbitmq_go
+      - localNetwork
 
 
   userapi:
@@ -84,10 +112,14 @@ services:
     build:
       context: .
       dockerfile: UserApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - database
     networks:
-        - rabbitmq_go
+      - localNetwork
 
 
 networks:
-  rabbitmq_go:
-    driver: bridge
+  localNetwork:
+    external: true
+    #driver: bridge

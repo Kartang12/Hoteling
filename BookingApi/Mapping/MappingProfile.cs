@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingApi.Contracts.Requests;
+using BookingApi.Contracts.Responses;
 using BookingApi.Domain;
 using HotelingLibrary.Messages;
 
@@ -10,6 +11,7 @@ namespace BookingApi.Mapping
         public MappingProfile()
         {
             CreateMap<Booking, BookingRequest>().ReverseMap();
+            CreateMap<Booking, BookingResponse>();
 
             //var m = CreateMap<HotelDataChangedEvent, Booking>();
             //m.ForAllMembers(opt => opt.Ignore());

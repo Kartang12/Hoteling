@@ -1,12 +1,13 @@
 version: '3.4'
+name: Hoteling project
 
 services:
   _gateway:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5192;http://+:7192
-    ports:
-      - "7192"
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:5192;https://+:7192
+    #ports:
+    #  - "7192"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -14,7 +15,7 @@ services:
   authorizationapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5035;http://+:5000
+      - ASPNETCORE_URLS=https://+:5035;https://+:5000
     ports:
       - "5000"
       #- "5035"
@@ -25,9 +26,9 @@ services:
   bookingapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5205;http://+:5001
-    ports:
-      - "5001"
+      - ASPNETCORE_URLS=https://+:5205;https://+:5001
+    #ports:
+    #  - "5001"
       #- "5205"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
@@ -58,7 +59,7 @@ services:
   userapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5014;http://+:5004
+      - ASPNETCORE_URLS=https://+:5014;https://+:5004
     ports:
       - "5004"
       #- "5014"

@@ -1,0 +1,135 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/auth/{everything}",
+      "DownstreamScheme": "http",
+      "SwaggerKey": "auth",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authorizationapi",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {
+      //"AddHeadersToRequest": {
+      //  //"Role": "Claims[Role] > value"
+      //  //"RouteClaimsRequirement": {
+      //  "Test": "Test"
+      //},
+      "UpstreamHeaderTransform": {
+        "Role": "Claims[Role] > value"
+      },
+      "DownstreamPathTemplate": "/booking/{everything}",
+      "DownstreamScheme": "http",
+      "SwaggerKey": "booking",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "bookingapi",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/booking/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/hotel/{everything}",
+      "DownstreamScheme": "http",
+      "SwaggerKey": "hoteling",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "hotelapi",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/hotel/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/room/{everything}",
+      "DownstreamScheme": "http",
+      "SwaggerKey": "hoteling",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "hotelapi",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/room/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/reviews/{everything}",
+      "DownstreamScheme": "http",
+      "SwaggerKey": "reviews",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reviewapi",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/reviews/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/user/{everything}",
+      "DownstreamScheme": "http",
+      "SwaggerKey": "users",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userapi",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    }
+  ],
+  //"SwaggerEndPoints": [
+  //  {
+  //    "Key": "booking",
+  //    "Config": [
+  //      {
+  //        "Name": "Booking API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5001/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "Key": "hoteling",
+  //    "Config": [
+  //      {
+  //        "Name": "Hoteling API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5002/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "Key": "reviews",
+  //    "Config": [
+  //      {
+  //        "Name": "Review API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5003/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "Key": "user",
+  //    "Config": [
+  //      {
+  //        "Name": "User API",
+  //        "Version": "v1",
+  //        "Url": "https://localhost:5004/swagger/v1/swagger.json"
+  //      }
+  //    ]
+  //  },
+  //],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7192"
+  }
+}

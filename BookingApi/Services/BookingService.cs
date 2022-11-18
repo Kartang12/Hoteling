@@ -56,7 +56,7 @@ namespace BookingApi.Services
             var newBooking = _mapper.Map<Booking>(request);
             newBooking.Id = Guid.NewGuid();
             var completeBooking = await _context.Bookings.AddAsync(newBooking);
-            return _mapper.Map<BookingResponse>(completeBooking);
+            return _mapper.Map<BookingResponse>(completeBooking.Entity);
         }
 
         public async Task DeleteAsync(Guid id)
