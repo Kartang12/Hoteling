@@ -5,9 +5,9 @@ services:
   _gateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      - ASPNETCORE_URLS=https://+:5192;https://+:7192
-    #ports:
-    #  - "7192"
+      - ASPNETCORE_URLS=http://+:7192
+    ports:
+      - "7192"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -15,7 +15,7 @@ services:
   authorizationapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5035;https://+:5000
+      - ASPNETCORE_URLS=http://+:5000
     ports:
       - "5000"
       #- "5035"
@@ -26,7 +26,7 @@ services:
   bookingapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5205;https://+:5001
+      - ASPNETCORE_URLS=http://+:5001
     #ports:
     #  - "5001"
       #- "5205"
@@ -37,7 +37,7 @@ services:
   hotelapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5267;http://+:5002
+      - ASPNETCORE_URLS=http://+:5002
     ports:
       - "5002"
       #- "5267"
@@ -48,7 +48,7 @@ services:
   reviewapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5038;http://+:5003
+      - ASPNETCORE_URLS=http://+:5003
     ports:
       - "5003"
       #- "5038"
@@ -59,7 +59,7 @@ services:
   userapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5014;https://+:5004
+      - ASPNETCORE_URLS=http://+:5004
     ports:
       - "5004"
       #- "5014"

@@ -2,14 +2,14 @@ version: '3.4'
 name: Hoteling project
 
 services:
-  database:
+  sqlserver:
     image: mcr.microsoft.com/mssql/server:2017-latest
     container_name: 'SQL_Server'
     environment:
       - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
-      - "5434:1433"
+      - "1433:1433"
     volumes:
       - /var/opt/mssql
     networks:
@@ -49,6 +49,9 @@ services:
 
   authorizationapi:
     image: ${DOCKER_REGISTRY-}authorizationapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=AuthorizationApi;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
     ports:
       - "5000:5000"
     build:
@@ -56,7 +59,7 @@ services:
       dockerfile: AuthorizationApi/Dockerfile
     depends_on:
       - rabbitmq
-      - database
+      - sqlserver
     networks:
       - localNetwork
 
@@ -65,6 +68,7 @@ services:
     image: ${DOCKER_REGISTRY-}bookingapi
     environment:
       - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Booking;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
     ports:
       - "5001:5001"
     build:
@@ -72,13 +76,16 @@ services:
       dockerfile: BookingApi/Dockerfile    
     depends_on:
       - rabbitmq
-      - database
+      - sqlserver
     networks:
       - localNetwork
 
 
   hotelapi:
     image: ${DOCKER_REGISTRY-}hotelapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Hotels;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
     ports:
       - "5002:5002"
     build:
@@ -86,13 +93,16 @@ services:
       dockerfile: HotelApi/Dockerfile
     depends_on:
       - rabbitmq
-      - database
+      - sqlserver
     networks:
       - localNetwork
 
 
   reviewapi:
     image: ${DOCKER_REGISTRY-}reviewapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Reviews;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
     ports:
       - "5003:5003"
     build:
@@ -100,13 +110,16 @@ services:
       dockerfile: ReviewApi/Dockerfile
     depends_on:
       - rabbitmq
-      - database
+      - sqlserver
     networks:
       - localNetwork
 
 
   userapi:
     image: ${DOCKER_REGISTRY-}userapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Users;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
     ports:
       - "5004:5004"
     build:
@@ -114,7 +127,7 @@ services:
       dockerfile: UserApi/Dockerfile
     depends_on:
       - rabbitmq
-      - database
+      - sqlserver
     networks:
       - localNetwork
 
