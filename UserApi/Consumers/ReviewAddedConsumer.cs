@@ -25,7 +25,7 @@ namespace UserApi.Consumers
             //        updatedUsers.Add(user);
             //    });
             //_context.Users.UpdateRange(updatedUsers);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
     }
 }

@@ -13,6 +13,7 @@ namespace HotelApi.Services
         Task<Room> CreateAsync(CreateRoomRequest request);
         Task DeleteAsync(Guid id);
         Task<Room> GetByIdAsync(Guid id);
+        Task<IEnumerable<Room>> GetAll();
         Task<IEnumerable<Room>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task<Room> UpdateAsync(Room toUpdate);
     }
@@ -39,6 +40,11 @@ namespace HotelApi.Services
         public async Task<Room> GetByIdAsync(Guid id)
         {
             return await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IEnumerable<Room>> GetAll()
+        {
+            return await _context.Rooms.ToListAsync();
         }
 
         public async Task<Room> CreateAsync(CreateRoomRequest request)

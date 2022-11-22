@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HotelingLibrary;
 using HotelingLibrary.Messages;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +14,11 @@ namespace ReviewApi.Services
         Task<Review> CreateAsync(CreateReviewRequest request);
         Task DeleteAsync(Guid id);
         Task<Review> GetByIdAsync(Guid id);
+        Task<IEnumerable<Review>> GetAll();
         Task<IEnumerable<Review>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task<Review> UpdateAsync(Review toUpdate);
+        Task ConsumeHotelChangedMessage(ConsumeContext<HotelDataChangedMessage> consumeContext);
+        Task ConsumeHotelDeletedMessage(ConsumeContext<HotelDeletedMessage> consumeContext);
     }
 
     public class ReviewService : IReviewService
@@ -41,6 +45,11 @@ namespace ReviewApi.Services
             return await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<Review>> GetAll()
+        {
+            return await _context.Reviews.ToListAsync();
+        }
+
         public async Task<Review> CreateAsync(CreateReviewRequest request)
         {
             var newReview = _mapper.Map<Review>(request);
@@ -62,6 +71,26 @@ namespace ReviewApi.Services
         {
             var result = _context.Reviews.Update(toUpdate);
             return result.Entity;
+        }
+
+        public async Task ConsumeHotelChangedMessage(ConsumeContext<HotelDataChangedMessage> consumeContext)
+        {
+            var reviews = _context.Reviews.Where(x => x.HotelId == consumeContext.Message.EntityId).ToList();
+            for (int i = 0; i < reviews.Count(); i++)
+            {
+                reviews[i].HotelName = consumeContext.Message.Name;
+            }
+            _context.Reviews.UpdateRange(reviews);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ConsumeHotelDeletedMessage(ConsumeContext<HotelDeletedMessage> consumeContext)
+        {
+            var reviews = _context.Reviews.Where(x => x.HotelId == consumeContext.Message.EntityId).ToList();
+            _context.Reviews.RemoveRange(reviews);
+            var ids = reviews.Select(x => x.Id).ToList();
+            await _publishEndpoint.Publish(new ReviewDeletedMessage() { UsersDeletedReviews = ids });
+            await _context.SaveChangesAsync();
         }
     }
 }

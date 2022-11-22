@@ -34,6 +34,7 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -46,6 +47,20 @@ namespace HotelApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                return Ok(await _service.GetAll());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateHotelRequest request)
         {

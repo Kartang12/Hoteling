@@ -1,30 +1,21 @@
-﻿using HotelingLibrary;
-using HotelingLibrary.Messages;
+﻿using HotelingLibrary.Messages;
 using MassTransit;
-using MassTransit.Initializers;
-using ReviewApi.DbContext;
+using ReviewApi.Services;
 
 namespace ReviewApi.Consumers
 {
     public class HotelDeletedConsumer : IConsumer<HotelDeletedMessage>
     {
-        private readonly ReviewsContext _context;
-        private readonly IBus _bus;
+        private readonly IReviewService _service;
 
-        public HotelDeletedConsumer(ReviewsContext context, IBus bus)
+        public HotelDeletedConsumer(IReviewService service)
         {
-            _context = context;
-            _bus = bus;
+            _service = service;
         }
 
         public async Task Consume(ConsumeContext<HotelDeletedMessage> consumeContext)
         {
-            var reviews = _context.Reviews.Where(x => x.HotelId == consumeContext.Message.EntityId).ToList();
-            _context.Reviews.RemoveRange(reviews);
-            var ids = reviews.Select(x => x.Id).ToList();
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue{QueuesUrls.User_ReviewDeleted}"));
-            endpoint.Send(new ReviewDeletedMessage() { UsersDeletedReviews = ids });
-            await _context.SaveChangesAsync();
+            await _service.ConsumeHotelDeletedMessage(consumeContext);
         }
     }
 }

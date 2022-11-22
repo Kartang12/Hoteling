@@ -2,8 +2,6 @@
 using HotelingLibrary;
 using HotelingLibrary.Messages;
 using MassTransit;
-using MassTransit.Initializers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserApi.Contracts.Requests;
 using UserApi.DbContext;
@@ -18,6 +16,7 @@ namespace UserApi.Services
         Task<IEnumerable<UserData>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task DeleteAsync(Guid userId);
         Task<UserData> UpdateAsync(UserData toUpdate);
+        Task ConsumeReviewDeletedMessage(ConsumeContext<ReviewDeletedMessage> consumeContext);
     }
 
     public class UserService : IUserService
@@ -64,6 +63,20 @@ namespace UserApi.Services
             endpoint.Send(message);
             await _context.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task ConsumeReviewDeletedMessage(ConsumeContext<ReviewDeletedMessage> consumeContext)
+        {
+            List<UserData> updatedUsers = new List<UserData>();
+            consumeContext.Message.UsersDeletedReviews.ForEach(
+                x =>
+                {
+                    var user = _context.Users.First(u => u.UserId == x);
+                    user.ReviewsAmount--;
+                    updatedUsers.Add(user);
+                });
+            _context.Users.UpdateRange(updatedUsers);
+            await _context.SaveChangesAsync();
         }
     }
 }
