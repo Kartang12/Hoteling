@@ -21,15 +21,15 @@ namespace UserApi.Services
 
     public class UserService : IUserService
     {
-        readonly IBus _bus;
+        readonly IPublishEndpoint _endpoint;
         readonly UsersContext _context;
         readonly IMapper _mapper;
 
-        public UserService(IMapper mapper, UsersContext context, IBus bus)
+        public UserService(IMapper mapper, UsersContext context, IPublishEndpoint endpoint)
         {
             _context = context;
             _mapper = mapper;
-            _bus = bus;
+            _endpoint = endpoint;
         }
 
         public async Task<IEnumerable<UserData>> GetByIdsAsync(IEnumerable<Guid> ids)
@@ -46,6 +46,7 @@ namespace UserApi.Services
         {
             var newHotel = _mapper.Map<UserData>(request);
             var result = await _context.Users.AddAsync(newHotel);
+            await _context.SaveChangesAsync();
             return result.Entity;
         }
 
@@ -53,14 +54,14 @@ namespace UserApi.Services
         {
             var toDelete = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
             _context.Users.Remove(toDelete);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<UserData> UpdateAsync(UserData toUpdate)
         {
             var result = _context.Users.Update(toUpdate);
             var message = _mapper.Map<UserDataChangedMessage>(result);
-            var endpoint = await _bus.GetSendEndpoint(new Uri($"queue:{QueuesUrls.Auth_UserChanged}"));
-            endpoint.Send(message);
+            await _endpoint.Publish(message);
             await _context.SaveChangesAsync();
             return result.Entity;
         }

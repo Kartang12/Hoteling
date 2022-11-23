@@ -21,7 +21,7 @@ namespace BookingApi.Migrations
                     HotelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HotelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EdnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     GuestsAmount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

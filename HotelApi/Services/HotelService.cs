@@ -53,7 +53,12 @@ namespace HotelApi.Services
         {
             var newHotel = _mapper.Map<Hotel>(request);
             newHotel.Id = Guid.NewGuid();
+            foreach(Room room in newHotel.Rooms)
+            {
+                room.HotelId = newHotel.Id;
+            }
             var result = await _context.Hotels.AddAsync(newHotel);
+            await _context.SaveChangesAsync();
             return result.Entity;
         }
 

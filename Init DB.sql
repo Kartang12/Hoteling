@@ -58,6 +58,20 @@ insert into  [Hotels].[dbo].[Hotels] VALUES(
     0
 );
 
+CREATE TABLE [Hotels].[dbo].[Rooms](
+	[Id] [uniqueidentifier] NOT NULL,
+	[HotelId] [uniqueidentifier] NOT NULL,
+	[Number] [int] NOT NULL,
+	[Wifi] [bit] NOT NULL,
+	[Square] [float] NOT NULL,
+ CONSTRAINT [PK_Rooms] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
 
 
 Create Database Booking;
@@ -73,7 +87,7 @@ CREATE TABLE [Booking].[dbo].[Bookings](
 	[HotelId] [uniqueidentifier] NOT NULL,
 	[HotelName] [nvarchar](max) NOT NULL,
 	[StartDate] [datetime2](7) NOT NULL,
-	[EdnDate] [datetime2](7) NOT NULL,
+	[EndDate] [datetime2](7) NOT NULL,
 	[GuestsAmount] [int] NOT NULL,
  CONSTRAINT [PK_Bookings] PRIMARY KEY CLUSTERED 
 (

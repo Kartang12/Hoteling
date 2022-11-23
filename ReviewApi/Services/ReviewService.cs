@@ -56,6 +56,7 @@ namespace ReviewApi.Services
             newReview.Id = Guid.NewGuid();
             newReview.Date = DateTime.Now;
             var result = await _context.Reviews.AddAsync(newReview);
+            await _context.SaveChangesAsync();
             var addMessage = _mapper.Map<ReviewAddedMessage>(result);
             await _publishEndpoint.Publish(addMessage);
             return result.Entity;
@@ -65,11 +66,13 @@ namespace ReviewApi.Services
         {
             var toDelete = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
             _context.Reviews.Remove(toDelete);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Review> UpdateAsync(Review toUpdate)
         {
             var result = _context.Reviews.Update(toUpdate);
+            await _context.SaveChangesAsync();
             return result.Entity;
         }
 

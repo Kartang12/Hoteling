@@ -65,6 +65,7 @@ namespace BookingApi.Services
             var newBooking = _mapper.Map<Booking>(request);
             newBooking.Id = Guid.NewGuid();
             var completeBooking = await _context.Bookings.AddAsync(newBooking);
+            await _context.SaveChangesAsync();
             return _mapper.Map<BookingResponse>(completeBooking.Entity);
         }
 
@@ -72,11 +73,13 @@ namespace BookingApi.Services
         {
             var toDelete = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == id);
             _context.Bookings.Remove(toDelete);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Booking> UpdateAsync(Booking toUpdate)
         {
             _context.Bookings.Update(toUpdate);
+            await _context.SaveChangesAsync();
             return toUpdate;
         }
         
