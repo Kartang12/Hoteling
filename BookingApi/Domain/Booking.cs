@@ -8,7 +8,7 @@
         public Guid HotelId { get; set; }
         public string HotelName { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EdnDate { get; set; }
+        public DateTime EndDate { get; set; }
         public int GuestsAmount { get; set; }
     }
 }

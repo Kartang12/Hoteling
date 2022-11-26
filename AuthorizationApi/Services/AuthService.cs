@@ -3,6 +3,8 @@ using AuthorizationApi.Contracts.Requests;
 using AuthorizationApi.Contracts.Responses;
 using AuthorizationApi.Domain;
 using AuthorizationApi.Models.Requests;
+using HotelingLibrary.Messages;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -16,6 +18,7 @@ namespace AuthorizationApi.Services
         Task<AuthenticationResponse> LogInAsync(LoginRequest request);
         Task<AuthenticationResponse> RefreshAsync(RefreshTokenRequest request);
         Task<string> GetRole(string userToken);
+        Task ConsumeUserChangedMessage(ConsumeContext<UserDataChangedMessage> consumeContext);
     }
 
     public class AuthService : IAuthService
@@ -119,6 +122,14 @@ namespace AuthorizationApi.Services
         public async Task<string> GetRole(string userToken)
         {
             return _tokenService.GetRole(userToken);
+        }
+
+        public async Task ConsumeUserChangedMessage(ConsumeContext<UserDataChangedMessage> consumeContext)
+        {
+            var user = _userContext.Users.First(x => x.Id == consumeContext.Message.EntityId);
+            user.Email = consumeContext.Message.Email;
+            _userContext.Users.Update(user);
+            await _userContext.SaveChangesAsync();
         }
     }
 }

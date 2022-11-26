@@ -1,44 +1,138 @@
 version: '3.4'
+name: Hoteling project
 
 services:
-  gateway:
-    image: eshop/webmvc
-    ports:
-      - "5100:80"
-    
-  auth-api:
-    image: eshop/catalog-api
-    expose:
-      - "80"
-    ports:
-      - "5101:80"
-    #extra hosts can be used for standalone SQL Server or services at the dev PC
-    
-  user-api:
-    image: eshop/ordering-api
-    ports:
-      - "5102:80"
-    #extra hosts can be used for standalone SQL Server or services at the dev PC
-    
-  hotel-api:
-    image: eshop/basket-api
-    ports:
-      - "5103:80"
-
-  booking-api:
-    image: eshop/basket-api
-    ports:
-      - "5103:80"
-
-  review-api:
-    image: eshop/basket-api
-    ports:
-      - "5103:80"
-
-
-  sqldata:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: 'SQL_Server'
     environment:
-      - SA_PASSWORD=[PLACEHOLDER]
+      - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
-      - "5434:1433"
+      - "1433:1433"
+    volumes:
+      - /var/opt/mssql
+    networks:
+      - localNetwork
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - localNetwork
+
+
+
+  _gateway:
+    image: ${DOCKER_REGISTRY-}gateway
+    ports:
+      - "7192:7192"
+    build:
+      context: .
+      dockerfile: _Gateway/Dockerfile
+    depends_on:
+      - authorizationapi
+      - bookingapi
+      - hotelapi
+      - reviewapi
+      - userapi
+    networks:
+      - localNetwork 
+
+
+
+  authorizationapi:
+    image: ${DOCKER_REGISTRY-}authorizationapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=AuthorizationApi;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
+    ports:
+      - "5000:5000"
+    build:
+      context: .
+      dockerfile: AuthorizationApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    networks:
+      - localNetwork
+
+
+  bookingapi:
+    image: ${DOCKER_REGISTRY-}bookingapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Booking;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
+    ports:
+      - "5001:5001"
+    build:
+      context: .
+      dockerfile: BookingApi/Dockerfile    
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    networks:
+      - localNetwork
+
+
+  hotelapi:
+    image: ${DOCKER_REGISTRY-}hotelapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Hotels;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
+    ports:
+      - "5002:5002"
+    build:
+      context: .
+      dockerfile: HotelApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    networks:
+      - localNetwork
+
+
+  reviewapi:
+    image: ${DOCKER_REGISTRY-}reviewapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Reviews;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
+    ports:
+      - "5003:5003"
+    build:
+      context: .
+      dockerfile: ReviewApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    networks:
+      - localNetwork
+
+
+  userapi:
+    image: ${DOCKER_REGISTRY-}userapi
+    environment:
+      - ConnectionStrings__RabbitMQ=rabbitmq
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Users;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
+    ports:
+      - "5004:5004"
+    build:
+      context: .
+      dockerfile: UserApi/Dockerfile
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    networks:
+      - localNetwork
+
+
+networks:
+  localNetwork:
+    external: true
+    #driver: bridge

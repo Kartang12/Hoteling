@@ -22,7 +22,7 @@ namespace BookingApi.DbContext
                         HotelId = Guid.Parse("64B71417-F19D-4B81-ACD3-EB180D0D638F"),
                         HotelName = "Afterlife",
                         StartDate = DateTime.Parse("2022-10-22 00:00:00.0000000"),
-                        EdnDate = DateTime.Parse("2022-12-22 00:00:00.0000000"),
+                        EndDate = DateTime.Parse("2022-12-22 00:00:00.0000000"),
                         GuestsAmount = 10
                     }
                 );

@@ -32,7 +32,7 @@ builder.Services.AddMassTransit(config => {
     config.UsingRabbitMq((context, configuration) =>
     {
         configuration.Host(builder.Configuration.GetConnectionString("RabbitMQ"));
-        configuration.ReceiveEndpoint(QueuesUrls.ReviewsDeleted, c =>{
+        configuration.ReceiveEndpoint(QueuesUrls.User_ReviewDeleted, c =>{
             c.ConfigureConsumer<ReviewDeletedConsummer>(context);
         });
     });

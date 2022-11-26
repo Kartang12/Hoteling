@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  gateway:
+    image: eshop/webmvc
+    ports:
+      - "5100:80"
+    
+  auth-api:
+    image: eshop/catalog-api
+    expose:
+      - "80"
+    ports:
+      - "5101:80"
+    #extra hosts can be used for standalone SQL Server or services at the dev PC
+    
+  user-api:
+    image: eshop/ordering-api
+    ports:
+      - "5102:80"
+    #extra hosts can be used for standalone SQL Server or services at the dev PC
+    
+  hotel-api:
+    image: eshop/basket-api
+    ports:
+      - "5103:80"
+
+  booking-api:
+    image: eshop/basket-api
+    ports:
+      - "5103:80"
+
+  review-api:
+    image: eshop/basket-api
+    ports:
+      - "5103:80"
+
+
+  sqldata:
+    environment:
+      - SA_PASSWORD=[PLACEHOLDER]
+      - ACCEPT_EULA=Y
+    ports:
+      - "5434:1433"

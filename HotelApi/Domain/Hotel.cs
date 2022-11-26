@@ -8,5 +8,6 @@
         public int RoomsAmount { get; set; }
         public double Rating { get; set; }
         public int TotalVisitors { get; set; }
+        public IEnumerable<Room> Rooms { get; set; }
     }
 }

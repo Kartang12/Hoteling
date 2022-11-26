@@ -13,6 +13,7 @@ namespace HotelApi.Services
         Task<Hotel> CreateAsync(CreateHotelRequest request);
         Task DeleteAsync(Guid id);
         Task<Hotel> GetByIdAsync(Guid id);
+        Task<IEnumerable<Hotel>> GetAll();
         Task<IEnumerable<Hotel>> GetByIdsAsync(IEnumerable<Guid> ids);
         Task<Hotel> UpdateAsync(Hotel toUpdate);
     }
@@ -43,11 +44,21 @@ namespace HotelApi.Services
             return await _context.Hotels.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<Hotel>> GetAll()
+        {
+            return await _context.Hotels.ToListAsync();
+        }
+
         public async Task<Hotel> CreateAsync(CreateHotelRequest request)
         {
             var newHotel = _mapper.Map<Hotel>(request);
             newHotel.Id = Guid.NewGuid();
+            foreach(Room room in newHotel.Rooms)
+            {
+                room.HotelId = newHotel.Id;
+            }
             var result = await _context.Hotels.AddAsync(newHotel);
+            await _context.SaveChangesAsync();
             return result.Entity;
         }
 

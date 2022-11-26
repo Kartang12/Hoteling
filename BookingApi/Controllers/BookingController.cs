@@ -18,7 +18,7 @@ namespace BookingApi.Controllers
         }
 
         [HttpGet]
-        [RoleFilter(UserRolesEnum.Admin)]
+        //[RoleFilter(UserRolesEnum.Admin)]
         public async Task<IActionResult> Get()
         {
             _service.Get();
@@ -31,6 +31,19 @@ namespace BookingApi.Controllers
             try
             {
                 return Ok(await _service.GetByIdsAsync(ids));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                return Ok(await _service.GetAll());
             }
             catch (Exception ex)
             {

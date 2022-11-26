@@ -16,8 +16,9 @@ namespace ReviewApi.DbContext
                     new Review
                     {
                         Id = Guid.NewGuid(),
-                        UserId = Guid.Parse("A567C4AA-388E-4A9F-60AA-08DAB0276093")
+                        UserId = Guid.Parse("A567C4AA-388E-4A9F-60AA-08DAB0276093"),
                         HotelId = Guid.Parse("64B71417-F19D-4B81-ACD3-EB180D0D638F"),
+                        UserName = "Seeded user",
                         HotelName = "Afterlife",
                         Feedback = "Great bds, cheap beer",
                         Score = 10
